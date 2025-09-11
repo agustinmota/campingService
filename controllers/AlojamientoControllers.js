@@ -66,4 +66,5 @@ async function destroy(req, res) {
             create,
             edit,
             destroy
+            
         };
