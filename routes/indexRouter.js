@@ -1,13 +1,13 @@
-const cabanaRoutes=require('../routes/cabanaRoutes');
-const parcelaRoutes= require('../routes/parcelaRoutes');
-const estadiaRoutes= require('../routes/estadiaRoutes');
-const titularRoutes=require('../routes/titularRoutes');
-const alojamientoRoutes= require('../routes/alojamientoRoutes');
+const cabinRoutes=require('./cabinRoutes');
+const campsiteRoutes= require('./campsiteRoutes');
+const bookingRoutes= require('./bookingRoutes');
+const guestRoutes=require('./guestRoutes');
+const accommodationRoutes= require('./accommodationRoutes');
 module.exports=(app)=>{
 
-app.use('/cabana',cabanaRoutes);
-app.use('/parcela', parcelaRoutes);
-app.use('/estadia', estadiaRoutes);
-app.use('/titular', titularRoutes);
-app.use('/alojamiento',alojamientoRoutes);
+app.use('/cabin',cabinRoutes);
+app.use('/campsite', campsiteRoutes);
+app.use('/booking', bookingRoutes);
+app.use('/guest', guestRoutes);
+app.use('/accommodation', accommodationRoutes);
 }

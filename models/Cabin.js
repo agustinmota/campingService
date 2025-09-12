@@ -1,17 +1,17 @@
 const {Sequelize, DataTypes, Model} = require("sequelize")
-Alojamiento=require("./Alojamiento");
+Alojamiento=require("./Accommodation");
 
-class Cabana extends Model {
+class Cabin extends Model {
     static initModel(sequelize){
         return super.init({
             id: { type: DataTypes.INTEGER, primaryKey: true ,autoIncrement:true},
-            identificador: { type: DataTypes.STRING, allowNull: false }, // letra
-            maximaCapacidad: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 10 },
-            precioPorDia: { type: DataTypes.DECIMAL, allowNull: false }
+            identifier: { type: DataTypes.STRING, allowNull: false }, // letra
+            maxCapacity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 10 },
+            pricePerDay: { type: DataTypes.DECIMAL, allowNull: false }
         },{
             sequelize,
-            modelName: "Cabana",
-            tableName: "cabanas",
+            modelName: "Cabin",
+            tableName: "cabins",
             timestamps: false
         });
     }
@@ -21,4 +21,4 @@ class Cabana extends Model {
         models.Alojamiento.hasOne(this, { foreignKey: "id" });
     }
 }
-module.exports = Cabana;
+module.exports = Cabin;

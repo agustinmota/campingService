@@ -1,80 +1,79 @@
 const { differenceInDays } = require('date-fns');
-const Estadia = require('../models/Estadia');
-const Alojamiento = require('../models/Alojamiento');
-const Cabana = require('../models/Cabana');
-const Parcela = require('../models/Parcela');
+const Booking = require('../models/Booking');
+const Accommodation = require('../models/Accommodation');
+const Cabin= require('../models/Cabin');
+const Campsite = require('../models/Campsite');
 const { Op } = require('sequelize');
 
 
 
 
-async function buscarDisponiblePorFechas(req, res) {
-    const { ingreso, egreso } = req.body;
+async function searchAvailableDates(req, res) {
+    const { checkIn, checkOut } = req.body;
     try {
-        const estadiasDisponibles = await Estadia.findAll({
+        const availableBookings = await Booking.findAll({
             where: {
-                ingreso: { [Op.lt]: egreso },
-                  egreso: { [Op.gt]: ingreso }
-                 } 
+                checkIn: { [Op.lt]: checkOut },
+                checkOut: { [Op.gt]: checkIn }
+            }
         });
-        if(!estadiasDisponibles || estadiasDisponibles.length === 0) {
-            res.json({message:'No hay estadías disponibles en las fechas seleccionadas'});
+        if(!availableBookings || availableBookings.length === 0) {
+            res.json({message:'No available bookings for the selected dates'});
         }
-        return res.json(estadiasDisponibles);
+        return res.json(availableBookings);
     } catch (error) {
-        res.status(500).json({message:'error al buscar estadías disponibles'});
+        res.status(500).json({message:'Error searching for available bookings'});
     }
 };
 
 
-async function buscarPorTipo(req, res){
-   const{ingreso,egreso,tipo}=req.body;
-    
-  try{ const porTipoDisponibles   = await Estadia.findAll({
-        where:{ tipo,
-            ingreso: { [Op.lt]: egreso },
-                  egreso: { [Op.gt]: ingreso }
+async function searchByType(req, res){
+   const{checkIn,checkOut,type}=req.body;
+
+  try{ const byTypeAvailable = await Booking.findAll({
+        where:{ type,
+            checkIn: { [Op.lt]: checkOut },
+            checkOut: { [Op.gt]: checkIn }
          },
            include: [
         {
-          model: Alojamiento,
-          where: { tipo },
+          model: Accommodation,
+          where: { type },
         }
       ]
          
     });
-    if(!porTipoDisponibles || porTipoDisponibles.length===0){
-        res.json({message:'No hay estadías disponibles en las fechas seleccionadas'});
+    if(!byTypeAvailable || byTypeAvailable.length===0){
+        res.json({message:'No available stays for the selected type and dates'});
     }
-    return res.json(porTipoDisponibles);
+    return res.json(byTypeAvailable);
   }
     catch(error){
-        res.status(500).json({message:'error al buscar estadías disponibles'});
+        res.status(500).json({message:'Error searching for available stays'});
     }};
-   
-async function calcularMonto({ cantidadDePersonas, alojamientoId, ingreso, egreso }) {
-    const cantidadDeDias = differenceInDays(new Date(egreso), new Date(ingreso));
+
+async function calculateAmount({ amountOfPeople, accommodationId, checkIn, checkOut }) {
+    const numberOfDays = differenceInDays(new Date(checkOut), new Date(checkIn));
 
     try {
-        const alojamiento = await Alojamiento.findByPk(alojamientoId, {
-            include: [Cabana, Parcela]
+        const accommodation = await Accommodation.findByPk(accommodationId, {
+            include: [Cabin, Campsite]
         });
 
-        if (!alojamiento) throw new Error('Alojamiento no encontrado');
+        if (!accommodation) throw new Error('Accommodation not found');
 
-  
-        let monto;
-        if (alojamiento.tipo === 'cabana') {
-            monto = cantidadDeDias * alojamiento.Cabana.precioPorDia;
-        } else if (alojamiento.tipo === 'parcela') {
-            monto = cantidadDePersonas * alojamiento.Parcela.precioPorPersona * cantidadDeDias;
+        let amount;
+        if (accommodation.type === 'cabin') {
+            amount = numberOfDays * accommodation.Cabin.pricePerDay;
+        } else if (accommodation.type === 'campsite') {
+            amount = amountOfPeople * accommodation.Campsite.pricePerPerson * numberOfDays;
         } else {
-            throw new Error('Tipo de alojamiento no válido');
+            throw new Error('Invalid accommodation type');
         }
 
-        return monto;
+        return amount;
     } catch (error) {
-        throw new Error('Error al calcular el monto: ' + error.message);
+        throw new Error('Error calculating amount: ' + error.message);
     }
 }
 
@@ -93,4 +92,4 @@ async function calcularMonto({ cantidadDePersonas, alojamientoId, ingreso, egres
     })
 }*/
 
-module.exports={buscarDisponiblePorFechas,buscarPorTipo,calcularMonto};
+module.exports={searchAvailableDates,searchByType,calculateAmount};

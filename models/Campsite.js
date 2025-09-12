@@ -1,16 +1,16 @@
 const {Sequelize, DataTypes, Model} = require("sequelize")
 
-class Parcela extends Model {
+class Campsite extends Model {
     static initModel(sequelize){
         return super.init({
             id: { type: DataTypes.INTEGER, primaryKey: true },
-            identificador: { type: DataTypes.STRING, allowNull: false }, // número como string o integer
-            maximaCapacidad: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 4 },
-            precioPorPersona: { type: DataTypes.DECIMAL, allowNull: false }
+            identifier: { type: DataTypes.STRING, allowNull: false }, // número como string o integer
+            maxCapacity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 4 },
+            pricePerPerson: { type: DataTypes.DECIMAL, allowNull: false }
         },{
             sequelize,
-            modelName: "Parcela",
-            tableName: "parcelas",
+            modelName: "Campsite",
+            tableName: "campsites",
             timestamps: false
         });
     }
@@ -20,4 +20,4 @@ class Parcela extends Model {
         models.Alojamiento.hasOne(this, { foreignKey: "id" });
     }
 }
-module.exports = Parcela;
+module.exports = Campsite;

@@ -1,9 +1,9 @@
 const { Sequelize } = require("sequelize");
-const Alojamiento = require("./Alojamiento");
-const Cabana = require("./Cabana");
-const Parcela = require("./Parcela");
-const Titular = require("./Titular");
-const Estadia = require("./Estadia");
+const Accommodation = require("./Accommodation");
+const Cabin = require("./Cabin");
+const Campsite = require("./Campsite");
+const Guest = require("./Guest");
+const Booking = require("./Booking");
 
 const sequelize = new Sequelize('campingservice', 'root', 'root', {
   dialect: "mysql",
@@ -18,64 +18,60 @@ async function init() {
     console.log('Connection has been established successfully.');
 
 
-    Alojamiento.initModel(sequelize);
-    Cabana.initModel(sequelize);
-    Parcela.initModel(sequelize);
-    Titular.initModel(sequelize);
-    Estadia.initModel(sequelize);
+    Accommodation.initModel(sequelize);
+    Cabin.initModel(sequelize);
+    Campsite.initModel(sequelize);
+    Guest.initModel(sequelize);
+    Booking.initModel(sequelize);
 
-  
-    Cabana.associate({ Alojamiento });
-    Parcela.associate({ Alojamiento });
-    Estadia.associate({ Alojamiento, Titular });
-    Titular.associate({ Estadia });
 
-    
+    Cabin.associate({ Accommodation });
+    Campsite.associate({ Accommodation });
+    Booking.associate({ Accommodation, Guest });
+    Guest.associate({ Booking });
+
     await sequelize.sync({ force: true });
     console.log("All tables created successfully!");
 
-    await Titular.bulkCreate([
+    await Guest.bulkCreate([
       {
-        nombre: "Juan",
-        apellido: "Pérez",
-        documento: "12345678",
-        telefono: "099111111",
-        esUruguayo: true,
-        tarjetaDeCredito: "1111-2222-3333-4444"
+        firstName: "Juan",
+        lastName: "Pérez",
+        document: "12345678",
+        phone: "099111111",
+
       },
       {
-        nombre: "María",
-        apellido: "Gómez",
-        documento: "87654321",
-        telefono: "099222222",
-        esUruguayo: false,
-        tarjetaDeCredito: "5555-6666-7777-8888"
+        firstName: "María",
+        lastName: "Gómez",
+        document: "87654321",
+        phone: "099222222",
+
       },
       {
-        nombre: "Pedro",
-        apellido: "Rodríguez",
-        documento: "45678912",
-        telefono: "099333333",
-        esUruguayo: true,
-        tarjetaDeCredito: "9999-0000-1111-2222"
+        firstName: "Pedro",
+        lastName: "Rodríguez",
+        document: "45678912",
+        phone: "099333333",
+
       }
       
     ]);
-const alojamientos = await Alojamiento.bulkCreate([
-    { tipo: 'cabana', identificador: 'A' },
-    { tipo: 'cabana', identificador: 'B' },
-    { tipo: 'cabana', identificador: 'C' },
-    
+const accommodations= await Accommodation.bulkCreate([
+    { type: 'cabin', identifier: 'A' },
+    { type: 'cabin', identifier: 'B' },
+    { type: 'cabin', identifier: 'C' },
+
 ]);
 
-await Cabana.bulkCreate([
-    { id: alojamientos[0].id, identificador: alojamientos[0].identificador, maximaCapacidad: 5, precioPorDia: 1000 },
-    { id: alojamientos[1].id, identificador: alojamientos[1].identificador, maximaCapacidad: 8, precioPorDia: 1200 },
-    { id: alojamientos[2].id, identificador: alojamientos[2].identificador, maximaCapacidad: 7, precioPorDia: 1100 },
+await Cabin.bulkCreate([
+    { id: accommodations[0].id, identifier: accommodations[0].identifier, maxCapacity: 5, pricePerDay: 1000 },
+    { id: accommodations[1].id, identifier: accommodations[1].identifier, maxCapacity: 8, pricePerDay: 1200 },
+    { id: accommodations[2].id, identifier: accommodations[2].identifier, maxCapacity: 7, pricePerDay: 1100 },
 ]);
 
 
-    console.log("✅ Titulares de prueba creados!");
+    console.log("Sample data inserted successfully!");
   } catch (error) {
     console.error('Unable to connect or create tables:', error);
   }
