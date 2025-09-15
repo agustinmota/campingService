@@ -4,11 +4,14 @@ const Cabin = require("./Cabin");
 const Campsite = require("./Campsite");
 const Guest = require("./Guest");
 const Booking = require("./Booking");
+const Admin = require("./Admin");
+const User = require("./User");
+require('dotenv').config();
 
-const sequelize = new Sequelize('campingservice', 'root', 'root', {
-  dialect: "mysql",
-  host: "localhost",
-  logging: console.log 
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  dialect: process.env.DB_DIALECT,
+  host: process.env.DB_HOST,
+  logging: console.log
 
 });
 
@@ -24,11 +27,17 @@ async function init() {
     Guest.initModel(sequelize);
     Booking.initModel(sequelize);
 
+    User.initModel(sequelize);
 
     Cabin.associate({ Accommodation });
     Campsite.associate({ Accommodation });
-    Booking.associate({ Accommodation, Guest });
+    Booking.associate({ Accommodation, Guest, User  });
     Guest.associate({ Booking });
+    User.associate({ Booking });
+
+
+    
+
 
     await sequelize.sync({ force: true });
     console.log("All tables created successfully!");
@@ -81,4 +90,4 @@ await Cabin.bulkCreate([
 init();
 
 
-module.exports = { sequelize, Alojamiento, Cabana, Parcela, Titular, Estadia, init };
+module.exports = { sequelize, Accommodation, Cabin, Campsite, Guest, Booking, init };

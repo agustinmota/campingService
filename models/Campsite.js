@@ -16,8 +16,8 @@ class Campsite extends Model {
     }
 
     static associate(models){
-        this.belongsTo(models.Alojamiento, { foreignKey: "id", onDelete: "CASCADE" });
-        models.Alojamiento.hasOne(this, { foreignKey: "id" });
+        this.belongsTo(models.Accommodation, { foreignKey: "id", onDelete: "CASCADE" });
+        models.Accommodation.hasOne(this, { foreignKey: "id" });
     }
 }
 module.exports = Campsite;

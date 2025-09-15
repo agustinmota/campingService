@@ -5,7 +5,7 @@ class User extends Model {
     return super.init({
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       nombreDeUsuario: { type: DataTypes.STRING, allowNull: false },
-      eMail: { type: DataTypes.STRING, allowNull: false },
+      eMail: { type: DataTypes.STRING, allowNull: false , unique: true},
       password: { type: DataTypes.STRING, allowNull: false },
 
     }, {
@@ -17,7 +17,8 @@ class User extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Estadia, { foreignKey: "UserId" });
+    this.hasMany(models.Booking, { foreignKey: "userId" });
+
   }
 }
 

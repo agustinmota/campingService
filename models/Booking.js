@@ -19,6 +19,7 @@ class Booking extends Model {
   static associate(models) {
     this.belongsTo(models.Guest, { foreignKey: "guestId" });
     this.belongsTo(models.Accommodation, { foreignKey: "accommodationId" });
+    this.belongsTo(models.User, { foreignKey: "userId" });
   }
 }
 
