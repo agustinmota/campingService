@@ -7,7 +7,7 @@ async function index(req, res){
         const bookings= await Booking.findAll();
         if(bookings){
             res.json({bookings,message:'bookings found'});
-
+            
         }
         else{
             res.json({message:'bookings not found'})
@@ -20,30 +20,41 @@ async function index(req, res){
 
 async function show(req, res){
     const {id}= req.params;
-   try{ const booking= await Booking.findByPk(id);
-    if(booking){
-        res.json({booking,message:'booking found'})
-
+    try{ const booking= await Booking.findByPk(id);
+        if(booking){
+            res.json({booking,message:'booking found'})
+            
+        }
+        else{
+            res.json({message:'booking not found'});
+        }
     }
-    else{
-        res.json({message:'booking not found'});
+    catch(error){
+        res.tatus(500).json({message:'error'});
     }
+    
 }
-catch(error){
-    res.tatus(500).json({message:'error'});
-}
-
+async function create(req, res){
+  const {checkIn, checkOut,amountOfPeople,guestId,accommodationId}=req.body;
+  try {
+      const totalAmount = await calculateAmount({accommodationId, amountOfPeople, checkIn, checkOut});
+      const booking = await Booking.create({checkIn, checkOut, amountOfPeople, totalAmount, guestId, accommodationId});
+      res.json({booking, message:'booking created successfully'});
+  }
+  catch(error){
+      res.status(500).json({message:'server error'});
+  }
 }
 async function edit(req,res){
     const {id}=req.params;
     const {checkIn, checkOut,amountOfPeople, totalAmount}=req.body;
-   try {const booking=await Booking.findByPk(id);
-    if(booking){
-        booking.checkIn=checkIn;
-        booking.checkOut=checkOut;
-        booking.amountOfPeople=amountOfPeople;
-        booking.totalAmount=totalAmount;
-        res.json({booking,message:'booking edited successfully'});
+    try {const booking=await Booking.findByPk(id);
+        if(booking){
+            booking.checkIn=checkIn;
+            booking.checkOut=checkOut;
+            booking.amountOfPeople=amountOfPeople;
+            booking.totalAmount=totalAmount;
+            res.json({booking,message:'booking edited successfully'});
     }else{
         res.json({message:'booking not found'});
     }}
@@ -69,16 +80,15 @@ async function edit(req,res){
         }
     
     }
-  async function create(req, res){
-    const {checkIn, checkOut,amountOfPeople,guestId,accommodationId}=req.body;
-    try {
-        const totalAmount = await calculateAmount({accommodationId, amountOfPeople, checkIn, checkOut});
-        const booking = await Booking.create({checkIn, checkOut, amountOfPeople, totalAmount, guestId, accommodationId});
-        res.json({booking, message:'booking created successfully'});
-    }
-    catch(error){
-        res.status(500).json({message:'server error'});
-    }
-}
 
-module.exports={index,show,edit, destroy, create};
+    async function myBookings(req, res) {
+        const userId = req.auth.userId; 
+        try {
+            const bookings = await Booking.findAll({ where: { userId }});
+            res.json({ bookings, message: 'Bookings retrieved successfully' });
+        } catch (error) {
+            res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+module.exports={index,show,edit, destroy, create,myBookings};

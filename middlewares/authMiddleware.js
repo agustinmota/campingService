@@ -1,5 +1,5 @@
 const {expressjwt: jwt} = require("express-jwt");
-
+require('dotenv').config();
 
 
 const authMiddleware = jwt({

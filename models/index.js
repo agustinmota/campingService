@@ -4,7 +4,6 @@ const Cabin = require("./Cabin");
 const Campsite = require("./Campsite");
 const Guest = require("./Guest");
 const Booking = require("./Booking");
-const Admin = require("./Admin");
 const User = require("./User");
 require('dotenv').config();
 

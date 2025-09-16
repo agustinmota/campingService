@@ -2,11 +2,13 @@ const express = require('express');
 
 const CabinControllers = require('../controllers/CabinControllers');
 const router = express.Router();
-
-router.get('/index', CabinControllers.index);
+const authMiddleware = require('../middlewares/authMiddleware');
+const authorizedRoles = require('../middlewares/authorizedRoles');
+router.get('/', CabinControllers.index);
 router.get('/show/:id', CabinControllers.show);
-router.post('/edit/:id', CabinControllers.edit);
-router.delete('/delete/:id', CabinControllers.destroy);
-router.post('/create', CabinControllers.create);
+router.use(authMiddleware);
+router.post('/edit/:id', authorizedRoles('admin'), CabinControllers.edit);
+router.delete('/delete/:id', authorizedRoles('admin'), CabinControllers.destroy);
+router.post('/create', authorizedRoles('admin'), CabinControllers.create);
 
-module.exports=router;
+module.exports = router;
