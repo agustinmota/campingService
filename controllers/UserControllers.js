@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const hashPassword = require("../utils/hashPassword");
 const jwt = require("jsonwebtoken");
 
 
@@ -31,8 +31,8 @@ async function show(req, res) {
 async function create(req, res) {
     const { username, password, email } = req.body;
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({ username, password: hashedPassword, email });
+        
+        const user = await User.create({ username, password: await hashPassword(password), email });
         res.status(201).json(user);
     } catch (error) {
         console.error("Error creating user:", error);

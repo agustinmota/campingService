@@ -5,7 +5,9 @@ const Campsite = require("./Campsite");
 const Guest = require("./Guest");
 const Booking = require("./Booking");
 const User = require("./User");
+const { hash } = require("bcryptjs");
 require('dotenv').config();
+const hashPassword = require ("../utils/hashPassword");
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
   dialect: process.env.DB_DIALECT,
@@ -86,7 +88,7 @@ await Cabin.bulkCreate([
 }
 
 
-init();
+
 
 
 module.exports = { sequelize, Accommodation, Cabin, Campsite, Guest, Booking, init };
