@@ -79,8 +79,14 @@ await Cabin.bulkCreate([
     { id: accommodations[1].id, identifier: accommodations[1].identifier, maxCapacity: 8, pricePerDay: 1200 },
     { id: accommodations[2].id, identifier: accommodations[2].identifier, maxCapacity: 7, pricePerDay: 1100 },
 ]);
-
-
+await User.bulkCreate([
+  {
+    nombreDeUsuario: "admin",
+    eMail: "admin@e.com",
+    password: await hashPassword("1234"),
+    role: "admin"
+  }
+]);
     console.log("Sample data inserted successfully!");
   } catch (error) {
     console.error('Unable to connect or create tables:', error);
