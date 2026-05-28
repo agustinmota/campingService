@@ -33,7 +33,12 @@ async function create(req, res) {
     try {
         
         const user = await User.create({ username, password: await hashPassword(password), email });
-        res.status(201).json(user);
+        res.status(201).json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role
+        });
     } catch (error) {
         console.error("Error creating user:", error);
         res.status(500).json({ error: "Internal server error" });

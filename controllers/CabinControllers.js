@@ -1,5 +1,7 @@
 const Cabin = require("../models/Cabin");
 const Accommodation = require("../models/Accommodation");
+const Booking = require("../models/Booking");
+const { Op } = require("sequelize");
 
 async function index(req, res){
     try{  const cabins = await Cabin.findAll();
@@ -11,6 +13,33 @@ async function index(req, res){
     }
     catch(error){
         res.status(500).json({message:'error'})
+    }
+}
+
+async function available(req, res) {
+    const { checkIn, checkOut } = req.query;
+
+    if (!checkIn || !checkOut) {
+        return res.status(400).json({ message: "checkIn and checkOut are required" });
+    }
+
+    try {
+        const cabins = await Cabin.findAll();
+        const cabinIds = cabins.map((cabin) => cabin.id);
+        const bookedCabins = await Booking.findAll({
+            attributes: ["accommodationId"],
+            where: {
+                accommodationId: { [Op.in]: cabinIds },
+                checkIn: { [Op.lt]: checkOut },
+                checkOut: { [Op.gt]: checkIn }
+            }
+        });
+        const bookedIds = new Set(bookedCabins.map((booking) => booking.accommodationId));
+        const availableCabins = cabins.filter((cabin) => !bookedIds.has(cabin.id));
+
+        return res.json({ cabins: availableCabins, message: "available cabins found" });
+    } catch (error) {
+        return res.status(500).json({ message: "error" });
     }
 }
     
@@ -79,4 +108,4 @@ catch(error){
     return res.status(500).json({message:'error'})
 }
  }
- module.exports={create,index,show,edit,destroy};
+ module.exports={create,index,show,edit,destroy,available};

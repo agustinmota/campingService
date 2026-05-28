@@ -5,6 +5,7 @@ const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
 const authorizedRoles = require('../middlewares/authorizedRoles');
 router.get('/', CabinControllers.index);
+router.get('/available', CabinControllers.available);
 router.get('/show/:id', CabinControllers.show);
 router.use(authMiddleware);
 router.post('/edit/:id', authorizedRoles('admin'), CabinControllers.edit);
