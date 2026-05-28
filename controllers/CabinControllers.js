@@ -30,10 +30,10 @@ async function index(req, res){
     }
     
     async function create(req, res){
-        const { identifier, maxCapacity, pricePerDay}=req.body;
+        const { identifier, maxCapacity, pricePerDay, description, imageUrl}=req.body;
         try {
             const newAccommodation= await Accommodation.create({type: 'cabin',identifier});
-            const newCabin= await Cabin.create({ id: newAccommodation.id, identifier: newAccommodation.identifier, maxCapacity, pricePerDay})
+            const newCabin= await Cabin.create({ id: newAccommodation.id, identifier: newAccommodation.identifier, maxCapacity, pricePerDay, description, imageUrl})
             res.json({cabin: newCabin,message: "cabin created successfully"});
         }
         catch(error){
@@ -42,13 +42,16 @@ async function index(req, res){
     }
  async function edit(req, res){
     const {id}= req.params;
-    const {identifier, maxCapacity, pricePerDay}= req.body;
+    const {identifier, maxCapacity, pricePerDay, description, imageUrl}= req.body;
     try{
         const cabin= await Cabin.findByPk(id);
         if (cabin){
             cabin.identifier=identifier;
             cabin.maxCapacity=maxCapacity;
             cabin.pricePerDay=pricePerDay;
+            cabin.description=description;
+            cabin.imageUrl=imageUrl;
+            await cabin.save();
             res.json({cabin,message:'cabin edited successfully'})
         }
         else{

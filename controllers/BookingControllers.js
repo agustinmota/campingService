@@ -38,7 +38,15 @@ async function create(req, res){
   const {checkIn, checkOut,amountOfPeople,guestId,accommodationId}=req.body;
   try {
       const totalAmount = await calculateAmount({accommodationId, amountOfPeople, checkIn, checkOut});
-      const booking = await Booking.create({checkIn, checkOut, amountOfPeople, totalAmount, guestId, accommodationId});
+      const booking = await Booking.create({
+        checkIn,
+        checkOut,
+        amountOfPeople,
+        totalAmount,
+        guestId,
+        accommodationId,
+        userId: req.auth.id || req.auth.userId
+      });
       res.json({booking, message:'booking created successfully'});
   }
   catch(error){
@@ -82,7 +90,7 @@ async function edit(req,res){
     }
 
     async function myBookings(req, res) {
-        const userId = req.auth.userId; 
+        const userId = req.auth.id || req.auth.userId;
         try {
             const bookings = await Booking.findAll({ where: { userId }});
             res.json({ bookings, message: 'Bookings retrieved successfully' });

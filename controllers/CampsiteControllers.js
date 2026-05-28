@@ -24,10 +24,10 @@ async function show(req, res) {
     
 }
 async function create(req, res){
-  const  { identifier, maxCapacity, pricePerPerson }= req.body;
+  const  { identifier, maxCapacity, pricePerPerson, description, imageUrl }= req.body;
   try{
     const newAccommodation= await Accommodation.create({type:"campsite", identifier});
-    const newCampsite= await Campsite.create({id:newAccommodation.id, identifier:newAccommodation.identifier, maxCapacity, pricePerPerson })
+    const newCampsite= await Campsite.create({id:newAccommodation.id, identifier:newAccommodation.identifier, maxCapacity, pricePerPerson, description, imageUrl })
     if(newCampsite){
         res.json({newCampsite,message:'campsite created'});
     }
@@ -40,13 +40,15 @@ async function create(req, res){
 
 async function  edit(req, res) {
     const {id} = req.params;
-    const  {identifier, maxCapacity, pricePerPerson }= req.body;
+    const  {identifier, maxCapacity, pricePerPerson, description, imageUrl }= req.body;
    try{
     const campsite= await Campsite.findByPk(id);
     if(campsite){
    campsite.identifier=identifier;
    campsite.maxCapacity=maxCapacity;
    campsite.pricePerPerson=pricePerPerson;
+   campsite.description=description;
+   campsite.imageUrl=imageUrl;
    await  campsite.save()
     res.json(campsite)}
     else {

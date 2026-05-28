@@ -7,7 +7,9 @@ class Cabin extends Model {
             id: { type: DataTypes.INTEGER, primaryKey: true ,autoIncrement:true},
             identifier: { type: DataTypes.STRING, allowNull: false }, // letra
             maxCapacity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 10 },
-            pricePerDay: { type: DataTypes.DECIMAL, allowNull: false }
+            pricePerDay: { type: DataTypes.DECIMAL, allowNull: false },
+            description: { type: DataTypes.TEXT, allowNull: true },
+            imageUrl: { type: DataTypes.STRING, allowNull: true }
         },{
             sequelize,
             modelName: "Cabin",

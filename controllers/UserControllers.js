@@ -49,7 +49,7 @@ async function edit(req, res) {
             user.username = username;
             user.email = email;
             if (password) {
-                user.password = await bcrypt.hash(password, 10);
+                user.password = await hashPassword(password);
             }
             await user.save();
             res.json(user);

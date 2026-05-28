@@ -6,7 +6,9 @@ class Campsite extends Model {
             id: { type: DataTypes.INTEGER, primaryKey: true },
             identifier: { type: DataTypes.STRING, allowNull: false }, // número como string o integer
             maxCapacity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 4 },
-            pricePerPerson: { type: DataTypes.DECIMAL, allowNull: false }
+            pricePerPerson: { type: DataTypes.DECIMAL, allowNull: false },
+            description: { type: DataTypes.TEXT, allowNull: true },
+            imageUrl: { type: DataTypes.STRING, allowNull: true }
         },{
             sequelize,
             modelName: "Campsite",

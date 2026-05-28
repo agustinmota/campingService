@@ -71,18 +71,25 @@ const accommodations= await Accommodation.bulkCreate([
     { type: 'cabin', identifier: 'A' },
     { type: 'cabin', identifier: 'B' },
     { type: 'cabin', identifier: 'C' },
+    { type: 'campsite', identifier: 'P1' },
+    { type: 'campsite', identifier: 'P2' },
 
 ]);
 
 await Cabin.bulkCreate([
-    { id: accommodations[0].id, identifier: accommodations[0].identifier, maxCapacity: 5, pricePerDay: 1000 },
-    { id: accommodations[1].id, identifier: accommodations[1].identifier, maxCapacity: 8, pricePerDay: 1200 },
-    { id: accommodations[2].id, identifier: accommodations[2].identifier, maxCapacity: 7, pricePerDay: 1100 },
+    { id: accommodations[0].id, identifier: accommodations[0].identifier, maxCapacity: 5, pricePerDay: 1000, description: "Cabana compacta con deck, sombra natural y acceso cercano a servicios.", imageUrl: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=900&q=80" },
+    { id: accommodations[1].id, identifier: accommodations[1].identifier, maxCapacity: 8, pricePerDay: 1200, description: "Cabana amplia para grupos, con comedor integrado y buena vista al entorno.", imageUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" },
+    { id: accommodations[2].id, identifier: accommodations[2].identifier, maxCapacity: 7, pricePerDay: 1100, description: "Cabana familiar en zona tranquila, ideal para estadias de descanso.", imageUrl: "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=900&q=80" },
+]);
+
+await Campsite.bulkCreate([
+    { id: accommodations[3].id, identifier: accommodations[3].identifier, maxCapacity: 4, pricePerPerson: 350, description: "Parcela arbolada para carpa chica, con facil acceso a banos y parrillero.", imageUrl: "https://images.unsplash.com/photo-1504851149312-7a075b496cc7?auto=format&fit=crop&w=900&q=80" },
+    { id: accommodations[4].id, identifier: accommodations[4].identifier, maxCapacity: 6, pricePerPerson: 420, description: "Parcela espaciosa para familia o grupo, pensada para estadias largas.", imageUrl: "https://images.unsplash.com/photo-1478827387698-1527781a4887?auto=format&fit=crop&w=900&q=80" },
 ]);
 await User.bulkCreate([
   {
-    nombreDeUsuario: "admin",
-    eMail: "admin@e.com",
+    username: "admin",
+    email: "admin@e.com",
     password: await hashPassword("1234"),
     role: "admin"
   }
