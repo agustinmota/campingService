@@ -1,10 +1,40 @@
 const Campsite = require("../models/Campsite");
 const Accommodation = require("../models/Accommodation");
+const Booking = require("../models/Booking");
+const { Op } = require("sequelize");
 
 
 async function index(req, res){
     const campsites= await Campsite.findAll();
     res.json(campsites);
+}
+
+async function available(req, res) {
+  const { checkIn, checkOut, amountOfPeople } = req.query;
+
+  if (!checkIn || !checkOut) {
+    return res.status(400).json({ message: "checkIn and checkOut are required" });
+  }
+
+  try {
+    const where = amountOfPeople ? { maxCapacity: { [Op.gte]: Number(amountOfPeople) } } : {};
+    const campsites = await Campsite.findAll({ where });
+    const campsiteIds = campsites.map((campsite) => campsite.id);
+    const bookedCampsites = await Booking.findAll({
+      attributes: ["accommodationId"],
+      where: {
+        accommodationId: { [Op.in]: campsiteIds },
+        checkIn: { [Op.lt]: checkOut },
+        checkOut: { [Op.gt]: checkIn }
+      }
+    });
+    const bookedIds = new Set(bookedCampsites.map((booking) => booking.accommodationId));
+    const availableCampsites = campsites.filter((campsite) => !bookedIds.has(campsite.id));
+
+    return res.json({ campsites: availableCampsites, message: "available campsites found" });
+  } catch (error) {
+    return res.status(500).json({ message: "error" });
+  }
 }
 
 async function show(req, res) {
@@ -79,4 +109,4 @@ async function destroy(req, res) {
     return res.status(500).json({ error: "Error deleting campsite" });
   }
 }
-module.exports={index,create,edit,destroy ,show};
+module.exports={index,create,edit,destroy ,show,available};

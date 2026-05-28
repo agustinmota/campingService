@@ -17,14 +17,15 @@ async function index(req, res){
 }
 
 async function available(req, res) {
-    const { checkIn, checkOut } = req.query;
+    const { checkIn, checkOut, amountOfPeople } = req.query;
 
     if (!checkIn || !checkOut) {
         return res.status(400).json({ message: "checkIn and checkOut are required" });
     }
 
     try {
-        const cabins = await Cabin.findAll();
+        const where = amountOfPeople ? { maxCapacity: { [Op.gte]: Number(amountOfPeople) } } : {};
+        const cabins = await Cabin.findAll({ where });
         const cabinIds = cabins.map((cabin) => cabin.id);
         const bookedCabins = await Booking.findAll({
             attributes: ["accommodationId"],
