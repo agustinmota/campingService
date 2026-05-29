@@ -1,10 +1,11 @@
 const Booking = require("../models/Booking");
 const Accommodation = require('../models/Accommodation');
+const Guest = require("../models/Guest");
 const { calculateAmount} = require('../services/campingService');
 
 async function index(req, res){
     try {
-        const bookings= await Booking.findAll();
+        const bookings= await Booking.findAll({ include: [{ model: Guest }] });
         if(bookings){
             res.json({bookings,message:'bookings found'});
             
@@ -20,7 +21,7 @@ async function index(req, res){
 
 async function show(req, res){
     const {id}= req.params;
-    try{ const booking= await Booking.findByPk(id);
+    try{ const booking= await Booking.findByPk(id, { include: [{ model: Guest }] });
         if(booking){
             res.json({booking,message:'booking found'})
             
@@ -35,15 +36,31 @@ async function show(req, res){
     
 }
 async function create(req, res){
-  const {checkIn, checkOut,amountOfPeople,guestId,accommodationId}=req.body;
+  const {checkIn, checkOut,amountOfPeople,guestId,accommodationId, firstName, lastName, document, phone}=req.body;
   try {
+      let bookingGuestId = guestId;
+
+      if (!bookingGuestId) {
+        if (!firstName || !lastName || !document) {
+          return res.status(400).json({ message: "holder firstName, lastName and document are required" });
+        }
+
+        const guest = await Guest.create({
+          firstName,
+          lastName,
+          document,
+          phone
+        });
+        bookingGuestId = guest.id;
+      }
+
       const totalAmount = await calculateAmount({accommodationId, amountOfPeople, checkIn, checkOut});
       const booking = await Booking.create({
         checkIn,
         checkOut,
         amountOfPeople,
         totalAmount,
-        guestId,
+        guestId: bookingGuestId,
         accommodationId,
         userId: req.auth.id || req.auth.userId
       });
@@ -92,7 +109,7 @@ async function edit(req,res){
     async function myBookings(req, res) {
         const userId = req.auth.id || req.auth.userId;
         try {
-            const bookings = await Booking.findAll({ where: { userId }});
+            const bookings = await Booking.findAll({ where: { userId }, include: [{ model: Guest }] });
             res.json({ bookings, message: 'Bookings retrieved successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Server error' });
