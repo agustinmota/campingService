@@ -1,9 +1,8 @@
 const Campsite = require("../models/Campsite");
 const Accommodation = require("../models/Accommodation");
-const Booking = require("../models/Booking");
-const { Op } = require("sequelize");
-
-const BLOCKING_BOOKING_STATUSES = ["pending", "confirmed", "checked_in"];
+const { findAvailableUnits, validateAvailabilityQuery } = require("../services/availabilityService");
+const { assignDefined } = require("../utils/modelUpdates");
+const { badRequest, notFound, serverError } = require("../utils/httpResponses");
 
 async function index(req, res){
     const campsites= await Campsite.findAll();
@@ -12,30 +11,18 @@ async function index(req, res){
 
 async function available(req, res) {
   const { checkIn, checkOut, amountOfPeople } = req.query;
+  const queryError = validateAvailabilityQuery({ checkIn, checkOut });
 
-  if (!checkIn || !checkOut) {
-    return res.status(400).json({ message: "checkIn and checkOut are required" });
+  if (queryError) {
+    return badRequest(res, queryError);
   }
 
   try {
-    const where = amountOfPeople ? { maxCapacity: { [Op.gte]: Number(amountOfPeople) } } : {};
-    const campsites = await Campsite.findAll({ where });
-    const campsiteIds = campsites.map((campsite) => campsite.id);
-    const bookedCampsites = await Booking.findAll({
-      attributes: ["accommodationId"],
-      where: {
-        accommodationId: { [Op.in]: campsiteIds },
-        status: { [Op.in]: BLOCKING_BOOKING_STATUSES },
-        checkIn: { [Op.lt]: checkOut },
-        checkOut: { [Op.gt]: checkIn }
-      }
-    });
-    const bookedIds = new Set(bookedCampsites.map((booking) => booking.accommodationId));
-    const availableCampsites = campsites.filter((campsite) => !bookedIds.has(campsite.id));
+    const availableCampsites = await findAvailableUnits(Campsite, { checkIn, checkOut, amountOfPeople });
 
     return res.json({ campsites: availableCampsites, message: "available campsites found" });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return serverError(res, error);
   }
 }
 
@@ -51,7 +38,7 @@ async function show(req, res) {
         }
     }
     catch(error){
-        res.status(500).json({message: error.message})
+        serverError(res, error)
     }
     
 }
@@ -65,7 +52,7 @@ async function create(req, res){
     }
   }
   catch(error){
-    res.status(500).json({ message: error.message });
+    serverError(res, error);
   }
 
 }
@@ -78,23 +65,19 @@ async function  edit(req, res) {
     if(campsite){
    const accommodation = await Accommodation.findByPk(id);
    if (accommodation) {
-    accommodation.identifier = identifier;
+    assignDefined(accommodation, { identifier });
     await accommodation.save();
    }
-   campsite.identifier=identifier;
-   campsite.maxCapacity=maxCapacity;
-   campsite.pricePerPerson=pricePerPerson;
-   campsite.description=description;
-   campsite.imageUrl=imageUrl;
+   assignDefined(campsite, { identifier, maxCapacity, pricePerPerson, description, imageUrl });
    await  campsite.save()
     res.json(campsite)}
     else {
-        res.status(404).json({message: "campsite not found"})
+        notFound(res, "campsite")
     }
 
 }
     catch(error){
-        res.status(500).json({message: error.message})
+        serverError(res, error)
 
     }
 }
@@ -109,11 +92,10 @@ async function destroy(req, res) {
       await campsite.destroy();
       return res.json({ message: "Campsite deleted successfully" });
     } else {
-      return res.status(404).json({ error: "Campsite not found" });
+      return notFound(res, "Campsite");
     }
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: error.message });
+    return serverError(res, error);
   }
 }
 module.exports={index,create,edit,destroy ,show,available};

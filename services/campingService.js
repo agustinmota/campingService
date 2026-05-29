@@ -4,10 +4,7 @@ const Accommodation = require('../models/Accommodation');
 const Cabin= require('../models/Cabin');
 const Campsite = require('../models/Campsite');
 const { Op } = require('sequelize');
-
-const BLOCKING_BOOKING_STATUSES = ["pending", "confirmed", "checked_in"];
-
-
+const { BLOCKING_BOOKING_STATUSES } = require('../constants/bookingStatuses');
 
 async function searchAvailableDates(req, res) {
     const { checkIn, checkOut } = req.body;

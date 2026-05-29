@@ -1,21 +1,26 @@
 const Accommodation = require("../models/Accommodation");
+const { notFound, serverError } = require("../utils/httpResponses");
 
 
 async function index(req, res) {
+  try {
     const accommodations = await Accommodation.findAll();
     res.json(accommodations);
+  } catch (error) {
+    serverError(res, error);
+  }
 }
 
 async function show(req, res) {
         const { id } = req.params;
       try { const accommodation = await Accommodation.findByPk(id);
         if (!accommodation) {
-            return res.status(404).json({ error: "Accommodation not found" });
+            return notFound(res, "Accommodation");
         }
         res.json(accommodation);
 
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        serverError(res, error);
     }
     }
 
@@ -26,7 +31,7 @@ async function create(req, res) {
         const newAccommodation = await Accommodation.create({ type, identifier });
         res.status(201).json(newAccommodation);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        serverError(res, error);
     }
 }
 
@@ -36,14 +41,14 @@ async function edit(req, res) {
     try {
         const accommodation = await Accommodation.findByPk(id);
         if (!accommodation) {
-            return res.status(404).json({ error: "Accommodation not found" });
+            return notFound(res, "Accommodation");
         }
         accommodation.maxCapacity = maxCapacity;
         accommodation.identifier = identifier;
         await accommodation.save();
         res.json(accommodation);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        serverError(res, error);
     }
 }   
 
@@ -52,13 +57,13 @@ async function destroy(req, res) {
     try {
         const accommodation = await Accommodation.findByPk(id);
         if (!accommodation) {
-            return res.status(404).json({ error: "Accommodation not found" });
+            return notFound(res, "Accommodation");
         } else {
             await accommodation.destroy();
             res.json({ message: "Accommodation deleted" });
         }
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        serverError(res, error);
     }
 };
 

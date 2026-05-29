@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const hashPassword = require("../utils/hashPassword");
-const jwt = require("jsonwebtoken");
+const { notFound, serverError } = require("../utils/httpResponses");
 
 
 
@@ -9,8 +9,7 @@ async function index(req, res) {
         const users = await User.findAll();
         res.json(users);
     } catch (error) {
-        console.error("Error fetching users:", error);
-        res.status(500).json({ error: error.message });
+        serverError(res, error);
     }
 }
 async function show(req, res) {
@@ -20,11 +19,10 @@ async function show(req, res) {
         if (user) {
             res.json(user);
         } else {
-            res.status(404).json({ error: "User not found" });
+            notFound(res, "User");
         }
     } catch (error) {
-        console.error("Error fetching user:", error);
-        res.status(500).json({ error: error.message });
+        serverError(res, error);
     }
 }
 
@@ -40,8 +38,7 @@ async function create(req, res) {
             role: user.role
         });
     } catch (error) {
-        console.error("Error creating user:", error);
-        res.status(500).json({ error: error.message });
+        serverError(res, error);
     }
 }
 
@@ -59,11 +56,10 @@ async function edit(req, res) {
             await user.save();
             res.json(user);
         } else {
-            res.status(404).json({ error: "User not found" });
+            notFound(res, "User");
         }
     } catch (error) {
-        console.error("Error updating user:", error);
-        res.status(500).json({ error: error.message });
+        serverError(res, error);
     }
 }
 async function destroy(req, res) {
@@ -74,11 +70,10 @@ async function destroy(req, res) {
             await user.destroy();
             res.status(204).send();
         } else {
-            res.status(404).json({ error: "User not found" });
+            notFound(res, "User");
         }
     } catch (error) {
-        console.error("Error deleting user:", error);
-        res.status(500).json({ error: error.message });
+        serverError(res, error);
     }
 }
 

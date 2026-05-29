@@ -133,6 +133,13 @@ React frontend
   -> MySQL database
 ```
 
+Recent backend organization improvements:
+
+- Booking status rules live in `constants/bookingStatuses.js`.
+- Cabin and campsite availability share `services/availabilityService.js`.
+- Common HTTP responses are handled through `utils/httpResponses.js`.
+- Partial model updates use `utils/modelUpdates.js` to avoid overwriting fields with `undefined`.
+
 ## Domain Model
 
 The API uses an accommodation abstraction so cabins and campsites can share reservation behavior while keeping their own pricing rules.
@@ -766,6 +773,8 @@ npm test
 
 Current test coverage includes:
 
+- Availability service filters blocked accommodations.
+- Availability service validates required and chronological dates.
 - `validateStay` allows valid bookings.
 - `validateStay` rejects over-capacity bookings.
 - `validateStay` rejects unavailable date ranges.
@@ -781,7 +790,7 @@ Current test coverage includes:
 Current result:
 
 ```text
-9 passing tests
+11 passing tests
 ```
 
 ## Recommended Demo Flow
@@ -816,13 +825,16 @@ campingService
     Express route definitions
 
   services/
-    Business logic such as amount calculation
+    Business logic such as amount calculation and availability search
+
+  constants/
+    Shared domain constants such as booking statuses
 
   tests/
     Node test runner unit tests
 
   utils/
-    Shared helpers such as password hashing
+    Shared helpers such as password hashing, response helpers, and model updates
 
   server.js
     Express app entry point
