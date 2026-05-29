@@ -5,7 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 const port = process.env.PORT || 3000;
 
-app.use(express.json()); 
+app.use(express.json({ limit: '10mb' })); 
 app.use(cors());
 const { init } = require('./models');
 routes(app);

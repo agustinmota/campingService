@@ -8,7 +8,7 @@ class Campsite extends Model {
             maxCapacity: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 4 },
             pricePerPerson: { type: DataTypes.DECIMAL, allowNull: false },
             description: { type: DataTypes.TEXT, allowNull: true },
-            imageUrl: { type: DataTypes.STRING, allowNull: true }
+            imageUrl: { type: DataTypes.TEXT("medium"), allowNull: true }
         },{
             sequelize,
             modelName: "Campsite",

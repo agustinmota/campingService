@@ -13,7 +13,11 @@ async function login(req, res) {
     const isValidPassword = await bcrypt.compare(req.body.password, user.password);
     if (!isValidPassword) return res.status(401).json({ message: "wrong credentials" });
 
-    const token = jwt.sign({ id: user.id, userId: user.id, role: user.role }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: user.id, userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
     return res.json({
       token,
       user: {
