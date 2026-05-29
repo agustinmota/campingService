@@ -2,6 +2,7 @@ const Booking = require("../models/Booking");
 const Accommodation = require('../models/Accommodation');
 const Guest = require("../models/Guest");
 const { calculateAmount} = require('../services/campingService');
+const BOOKING_STATUSES = ["pending", "confirmed", "checked_in", "checked_out", "cancelled"];
 
 async function index(req, res){
     try {
@@ -60,6 +61,7 @@ async function create(req, res){
         checkOut,
         amountOfPeople,
         totalAmount,
+        status: "pending",
         guestId: bookingGuestId,
         accommodationId,
         userId: req.auth.id || req.auth.userId
@@ -79,6 +81,7 @@ async function edit(req,res){
             booking.checkOut=checkOut;
             booking.amountOfPeople=amountOfPeople;
             booking.totalAmount=totalAmount;
+            await booking.save();
             res.json({booking,message:'booking edited successfully'});
     }else{
         res.json({message:'booking not found'});
@@ -113,7 +116,30 @@ async function edit(req,res){
             res.json({ bookings, message: 'Bookings retrieved successfully' });
         } catch (error) {
             res.status(500).json({ message: 'Server error' });
-        }
+    }
+}
+
+async function updateStatus(req, res) {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!BOOKING_STATUSES.includes(status)) {
+        return res.status(400).json({ message: "Invalid booking status" });
     }
 
-module.exports={index,show,edit, destroy, create,myBookings};
+    try {
+        const booking = await Booking.findByPk(id, { include: [{ model: Guest }] });
+        if (!booking) {
+            return res.status(404).json({ message: "booking not found" });
+        }
+
+        booking.status = status;
+        await booking.save();
+
+        return res.json({ booking, message: "booking status updated successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: "error" });
+    }
+}
+
+module.exports={index,show,edit, destroy, create,myBookings,updateStatus};

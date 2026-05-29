@@ -1,6 +1,7 @@
 const { Accommodation, Cabin, Campsite,Booking  } = require('../models');
 const { Op } = require('sequelize');
 
+const BLOCKING_BOOKING_STATUSES = ["pending", "confirmed", "checked_in"];
 
 
 
@@ -38,6 +39,7 @@ if (amountOfPeople > maxCapacity) {
         const conflict = await Booking.findOne({
             where: {
                 accommodationId,
+                status: { [Op.in]: BLOCKING_BOOKING_STATUSES },
                 checkIn: { [Op.lt]: checkOut },
                 checkOut: { [Op.gt]: checkIn }
             }

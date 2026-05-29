@@ -5,6 +5,7 @@ const Cabin= require('../models/Cabin');
 const Campsite = require('../models/Campsite');
 const { Op } = require('sequelize');
 
+const BLOCKING_BOOKING_STATUSES = ["pending", "confirmed", "checked_in"];
 
 
 
@@ -13,6 +14,7 @@ async function searchAvailableDates(req, res) {
     try {
         const availableBookings = await Booking.findAll({
             where: {
+                status: { [Op.in]: BLOCKING_BOOKING_STATUSES },
                 checkIn: { [Op.lt]: checkOut },
                 checkOut: { [Op.gt]: checkIn }
             }
@@ -32,6 +34,7 @@ async function searchByType(req, res){
 
   try{ const byTypeAvailable = await Booking.findAll({
         where:{ type,
+            status: { [Op.in]: BLOCKING_BOOKING_STATUSES },
             checkIn: { [Op.lt]: checkOut },
             checkOut: { [Op.gt]: checkIn }
          },

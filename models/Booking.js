@@ -7,7 +7,12 @@ class Booking extends Model {
       checkIn: { type: DataTypes.DATE, allowNull: false },
       checkOut: { type: DataTypes.DATE, allowNull: false },
       amountOfPeople: { type: DataTypes.INTEGER, allowNull: false },
-      totalAmount: { type: DataTypes.DECIMAL, allowNull: false }
+      totalAmount: { type: DataTypes.DECIMAL, allowNull: false },
+      status: {
+        type: DataTypes.ENUM("pending", "confirmed", "checked_in", "checked_out", "cancelled"),
+        allowNull: false,
+        defaultValue: "pending"
+      }
     }, {
       sequelize,
       modelName: "Booking",

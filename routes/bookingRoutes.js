@@ -12,6 +12,7 @@ router.get('/mybookings', BookingControllers.myBookings);
 router.get('/', authorizedRoles('admin'), BookingControllers.index);
 router.get('/show/:id', authorizedRoles('admin'), BookingControllers.show);
 router.post('/create', validateStay, BookingControllers.create);
+router.put('/status/:id', authorizedRoles('admin'), BookingControllers.updateStatus);
 router.put('/edit/:id', BookingControllers.edit);
 router.delete('/delete/:id', BookingControllers.destroy);
 
