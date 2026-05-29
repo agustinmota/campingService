@@ -8,6 +8,7 @@ router.get('/', CabinControllers.index);
 router.get('/available', CabinControllers.available);
 router.get('/show/:id', CabinControllers.show);
 router.use(authMiddleware);
+router.put('/edit/:id', authorizedRoles('admin'), CabinControllers.edit);
 router.post('/edit/:id', authorizedRoles('admin'), CabinControllers.edit);
 router.delete('/delete/:id', authorizedRoles('admin'), CabinControllers.destroy);
 router.post('/create', authorizedRoles('admin'), CabinControllers.create);

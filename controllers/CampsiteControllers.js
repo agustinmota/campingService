@@ -76,6 +76,11 @@ async function  edit(req, res) {
    try{
     const campsite= await Campsite.findByPk(id);
     if(campsite){
+   const accommodation = await Accommodation.findByPk(id);
+   if (accommodation) {
+    accommodation.identifier = identifier;
+    await accommodation.save();
+   }
    campsite.identifier=identifier;
    campsite.maxCapacity=maxCapacity;
    campsite.pricePerPerson=pricePerPerson;

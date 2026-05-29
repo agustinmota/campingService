@@ -78,6 +78,11 @@ async function available(req, res) {
     try{
         const cabin= await Cabin.findByPk(id);
         if (cabin){
+            const accommodation = await Accommodation.findByPk(id);
+            if (accommodation) {
+                accommodation.identifier = identifier;
+                await accommodation.save();
+            }
             cabin.identifier=identifier;
             cabin.maxCapacity=maxCapacity;
             cabin.pricePerDay=pricePerDay;
