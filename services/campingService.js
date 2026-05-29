@@ -24,7 +24,7 @@ async function searchAvailableDates(req, res) {
         }
         return res.json(availableBookings);
     } catch (error) {
-        res.status(500).json({message:'Error searching for available bookings'});
+        res.status(500).json({message: error.message});
     }
 };
 
@@ -52,7 +52,7 @@ async function searchByType(req, res){
     return res.json(byTypeAvailable);
   }
     catch(error){
-        res.status(500).json({message:'Error searching for available stays'});
+        res.status(500).json({message: error.message});
     }};
 
 async function calculateAmount({ amountOfPeople, accommodationId, checkIn, checkOut }) {

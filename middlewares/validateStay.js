@@ -51,7 +51,7 @@ if (amountOfPeople > maxCapacity) {
 
         next(); 
     } catch (error) {
-        res.status(500).json({ message: 'Error validating stay', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 }
 module.exports = validateStay;

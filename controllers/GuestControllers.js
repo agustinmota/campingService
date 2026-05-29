@@ -8,7 +8,7 @@ async function create(req, res){
        return res.json({newGuest, message:'guest created successfully'});
     }
    catch(error){
-        res.status(500).json({message: "error"})
+        res.status(500).json({message: error.message})
 
     }
 }
@@ -22,7 +22,7 @@ async function index(req, res){
 
     }
     catch(error){
-        res.status(500).json({message:'error'});
+        res.status(500).json({message: error.message});
 
     }
 }
@@ -34,12 +34,12 @@ async function show(req, res){
         return res.json({guest, message:'guest found'});
     }
     catch(error){
-        res.status(500).json({message:'error'});
+        res.status(500).json({message: error.message});
     }
 }
 async function edit(req, res){
     const {id}= req.params;
-    const {firstName, lastName, document, phoned}=req.body;
+    const {firstName, lastName, document, phone}=req.body;
     try{
         const guest= await Guest.findByPk(id);
         if(!guest) return res.json({message:'guest not found'});
@@ -47,7 +47,7 @@ async function edit(req, res){
         return res.json({updatedGuest, message:'guest updated successfully'});
     }
     catch(error){
-        res.status(500).json({message:'error'});
+        res.status(500).json({message: error.message});
     }
 }
 async function destroy(req, res){
@@ -59,7 +59,7 @@ async function destroy(req, res){
         return res.json({message:'guest deleted successfully'});
     }
     catch(error){
-        res.status(500).json({message:'error'});
+        res.status(500).json({message: error.message});
     }
 }
 

@@ -13,7 +13,7 @@ async function index(req, res){
         }
     }
     catch(error){
-        res.status(500).json({message:'error'})
+        res.status(500).json({message: error.message})
     }
 }
 
@@ -42,7 +42,7 @@ async function available(req, res) {
 
         return res.json({ cabins: availableCabins, message: "available cabins found" });
     } catch (error) {
-        return res.status(500).json({ message: "error" });
+        return res.status(500).json({ message: error.message });
     }
 }
     
@@ -57,7 +57,7 @@ async function available(req, res) {
             }
         }
         catch(error){
-            res.tatus(500).json({message:'error'})
+            res.status(500).json({message: error.message})
         }
     }
     
@@ -69,7 +69,7 @@ async function available(req, res) {
             res.json({cabin: newCabin,message: "cabin created successfully"});
         }
         catch(error){
-            res.status(500).json({message: "error"})
+            res.status(500).json({message: error.message})
         }
     }
  async function edit(req, res){
@@ -96,7 +96,7 @@ async function available(req, res) {
         }
     }
     catch(error){
-       res.tatus(500).json({message:'error'});
+       res.status(500).json({message: error.message});
     }
  }
 
@@ -113,7 +113,7 @@ if(cabin){
 }
 }
 catch(error){
-    return res.status(500).json({message:'error'})
+    return res.status(500).json({message: error.message})
 }
  }
  module.exports={create,index,show,edit,destroy,available};

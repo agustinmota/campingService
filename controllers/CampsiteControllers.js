@@ -35,7 +35,7 @@ async function available(req, res) {
 
     return res.json({ campsites: availableCampsites, message: "available campsites found" });
   } catch (error) {
-    return res.status(500).json({ message: "error" });
+    return res.status(500).json({ message: error.message });
   }
 }
 
@@ -51,7 +51,7 @@ async function show(req, res) {
         }
     }
     catch(error){
-        res.status(500).json({message: "error"})
+        res.status(500).json({message: error.message})
     }
     
 }
@@ -64,8 +64,8 @@ async function create(req, res){
         res.json({newCampsite,message:'campsite created'});
     }
   }
-  catch{
-    res.error()
+  catch(error){
+    res.status(500).json({ message: error.message });
   }
 
 }
@@ -94,7 +94,7 @@ async function  edit(req, res) {
 
 }
     catch(error){
-        res.status(500).json({message: "error"})
+        res.status(500).json({message: error.message})
 
     }
 }
@@ -113,7 +113,7 @@ async function destroy(req, res) {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Error deleting campsite" });
+    return res.status(500).json({ error: error.message });
   }
 }
 module.exports={index,create,edit,destroy ,show,available};

@@ -16,7 +16,7 @@ async function index(req, res){
         }
     }
     catch(error){
-        res.status(500).json({message:'error'});
+        res.status(500).json({message: error.message});
     }
 };
 
@@ -32,7 +32,7 @@ async function show(req, res){
         }
     }
     catch(error){
-        res.tatus(500).json({message:'error'});
+        res.status(500).json({message: error.message});
     }
     
 }
@@ -69,7 +69,7 @@ async function create(req, res){
       res.json({booking, message:'booking created successfully'});
   }
   catch(error){
-      res.status(500).json({message:'server error'});
+      res.status(500).json({message: error.message});
   }
 }
 async function edit(req,res){
@@ -87,7 +87,7 @@ async function edit(req,res){
         res.json({message:'booking not found'});
     }}
     catch(error){
-        res.tatus(500).json({message:'error'});
+        res.status(500).json({message: error.message});
     }
 }
     
@@ -104,7 +104,7 @@ async function edit(req,res){
            }
         }
         catch(error){
-            res.json({message:'error'});
+            res.status(500).json({message: error.message});
         }
     
     }
@@ -115,7 +115,7 @@ async function edit(req,res){
             const bookings = await Booking.findAll({ where: { userId }, include: [{ model: Guest }] });
             res.json({ bookings, message: 'Bookings retrieved successfully' });
         } catch (error) {
-            res.status(500).json({ message: 'Server error' });
+            res.status(500).json({ message: error.message });
     }
 }
 
@@ -138,7 +138,7 @@ async function updateStatus(req, res) {
 
         return res.json({ booking, message: "booking status updated successfully" });
     } catch (error) {
-        return res.status(500).json({ message: "error" });
+        return res.status(500).json({ message: error.message });
     }
 }
 
