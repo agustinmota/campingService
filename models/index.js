@@ -75,35 +75,35 @@ async function init() {
       {
         identifier: "A",
         maxCapacity: 5,
-        pricePerDay: 1000,
+        pricePerDay: 100,
         description: "Cozy wooden cabin with a private deck, natural shade, and easy access to shared services.",
         imageUrl: "/cabins/cabin-a.jpg"
       },
       {
         identifier: "B",
         maxCapacity: 8,
-        pricePerDay: 1200,
+        pricePerDay: 120,
         description: "Spacious family cabin with warm timber interiors, a large dining area, and views of the trees.",
         imageUrl: "/cabins/cabin-b.jpg"
       },
       {
         identifier: "C",
         maxCapacity: 7,
-        pricePerDay: 1100,
+        pricePerDay: 110,
         description: "Quiet cabin designed for restful stays, group meals, and slow mornings near nature.",
         imageUrl: "/cabins/cabin-c.jpg"
       },
       {
         identifier: "D",
         maxCapacity: 4,
-        pricePerDay: 1350,
+        pricePerDay: 135,
         description: "Premium couple cabin tucked into the woods, ideal for a calm weekend retreat.",
         imageUrl: "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=1200&q=80"
       },
       {
         identifier: "E",
         maxCapacity: 6,
-        pricePerDay: 1450,
+        pricePerDay: 145,
         description: "Modern rustic cabin with a covered porch, firepit area, and extra room for families.",
         imageUrl: "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=1200&q=80"
       }
@@ -113,49 +113,49 @@ async function init() {
       {
         identifier: "P1",
         maxCapacity: 4,
-        pricePerPerson: 350,
+        pricePerPerson: 35,
         description: "Shaded tent site with a flat pitch, nearby bathrooms, and a relaxed forest setting.",
         imageUrl: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=1200&q=80"
       },
       {
         identifier: "P2",
         maxCapacity: 6,
-        pricePerPerson: 420,
+        pricePerPerson: 45,
         description: "Spacious family campsite with room for a large tent, outdoor cooking, and longer stays.",
         imageUrl: "https://images.unsplash.com/photo-1517824806704-9040b037703b?auto=format&fit=crop&w=1200&q=80"
       },
       {
         identifier: "P3",
         maxCapacity: 2,
-        pricePerPerson: 300,
+        pricePerPerson: 30,
         description: "Quiet minimalist pitch for two, perfect for a small tent and a peaceful night outdoors.",
         imageUrl: "https://images.unsplash.com/photo-1508873696983-2dfd5898f08b?auto=format&fit=crop&w=1200&q=80"
       },
       {
         identifier: "P4",
         maxCapacity: 5,
-        pricePerPerson: 390,
+        pricePerPerson: 39,
         description: "Forest campsite with natural privacy, soft evening light, and space for a medium tent.",
         imageUrl: "https://images.unsplash.com/photo-1545157000-85f257f7b040?auto=format&fit=crop&w=1200&q=80"
       },
       {
         identifier: "P5",
         maxCapacity: 8,
-        pricePerPerson: 450,
+        pricePerPerson: 45,
         description: "Large group campsite with an open layout, great for friends, gear, and shared meals.",
         imageUrl: "https://images.unsplash.com/photo-1537225228614-56cc3556d7ed?auto=format&fit=crop&w=1200&q=80"
       },
       {
         identifier: "P6",
         maxCapacity: 3,
-        pricePerPerson: 330,
+        pricePerPerson: 35,
         description: "Private corner campsite surrounded by trees, suited for travelers who want extra quiet.",
         imageUrl: "https://images.unsplash.com/photo-1504851149312-7a075b496cc7?auto=format&fit=crop&w=1200&q=80"
       },
       {
         identifier: "P7",
         maxCapacity: 6,
-        pricePerPerson: 410,
+        pricePerPerson: 40,
         description: "Open meadow campsite with easy vehicle access, bright mornings, and plenty of fresh air.",
         imageUrl: "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=1200&q=80"
       }
