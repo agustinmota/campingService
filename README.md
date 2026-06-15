@@ -17,6 +17,7 @@ Backend repository: [campingService](https://github.com/agustinmota/campingServi
 - [Access Control](#access-control)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
+- [Railway Deployment](#railway-deployment)
 - [Database and Seed Data](#database-and-seed-data)
 - [API Reference](#api-reference)
 - [Error Handling](#error-handling)
@@ -371,8 +372,55 @@ http://localhost:3000
 | `DB_USER` | Yes | MySQL username. |
 | `DB_PASSWORD` | Yes | MySQL password. |
 | `DB_HOST` | Yes | MySQL host, usually `localhost`. |
+| `DB_PORT` | No | MySQL port. Defaults to `3306` when omitted by the driver. |
 | `DB_DIALECT` | Yes | Sequelize dialect. Use `mysql`. |
 | `JWT_SECRET` | Yes | Secret used to sign JWT access tokens. |
+
+## Railway Deployment
+
+The backend is deployed as a Railway service connected to a Railway MySQL database.
+
+Production backend URL:
+
+```text
+https://campingservice-production.up.railway.app
+```
+
+Health check:
+
+```http
+GET /
+```
+
+Expected response:
+
+```text
+Hello World!
+```
+
+Railway backend variables:
+
+```env
+JWT_SECRET=replace_with_a_long_secure_secret
+DB_DIALECT=mysql
+DB_NAME=railway
+DB_USER=root
+DB_PASSWORD=your_railway_mysql_password
+DB_HOST=your_railway_mysql_private_host
+DB_PORT=3306
+```
+
+Railway commands:
+
+```bash
+npm start
+```
+
+Important notes:
+
+- The backend must use the private MySQL host from the Railway MySQL service.
+- `JWT_SECRET` is required. The API will fail during startup if it is missing.
+- The frontend must consume the public backend URL, not the MySQL URL.
 
 ## Database and Seed Data
 
